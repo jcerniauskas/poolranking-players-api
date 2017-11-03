@@ -1,41 +1,37 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using poolranking_players_api.Models;
 
 namespace poolranking_players_api.Controllers
 {
     [Route("api/[controller]")]
     public class PlayersController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Player Get(string id)
         {
-            return "value";
+            return Player.GetMockedPlayer(id);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Player Post([FromBody]NewPlayerCommand newPlayer)
         {
+            Player player = Player.GetMockedPlayer();
+            player.Name = newPlayer.Name;
+
+            return player;
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public Player Put(string id, [FromBody]ModifyPlayerCommand modifiedPlayer)
         {
-        }
+            Player player = Player.GetMockedPlayer(id);
+            player.Name = modifiedPlayer.Name;
+            player.Rating = modifiedPlayer.Rating;
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            // Todo: Store new modified player object
+
+            return player;
         }
     }
 }
