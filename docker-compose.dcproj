@@ -5,8 +5,8 @@
     <DockerTargetOS>Windows</DockerTargetOS>
     <ProjectGuid>165521f8-ba86-4db6-8c6c-0af6d9760056</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
-    <DockerServiceUrl>http://{ServiceIPAddress}/api/values</DockerServiceUrl>
-    <DockerServiceName>poolrank-players-api</DockerServiceName>
+    <DockerServiceUrl>http://{ServiceIPAddress}/api/players</DockerServiceUrl>
+    <DockerServiceName>poolranking-players-api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.ci.build.yml" />

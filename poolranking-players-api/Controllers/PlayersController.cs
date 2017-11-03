@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using poolranking_players_api.Data;
 using poolranking_players_api.Models;
 
 namespace poolranking_players_api.Controllers
@@ -7,31 +9,38 @@ namespace poolranking_players_api.Controllers
     [Route("api/[controller]")]
     public class PlayersController : Controller
     {
-        [HttpGet("{id}")]
-        public Player Get(string id)
+        private DataClient _dataClient;
+
+        public PlayersController()
         {
-            return Player.GetMockedPlayer(id);
+            _dataClient = new DataClient();
+        }
+
+        [HttpGet]
+        public async Task<List<Player>> Get()
+        {
+            return await _dataClient.GetPlayers();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Player> Get(string id)
+        {
+            return await _dataClient.GetPlayer(id);
         }
 
         [HttpPost]
-        public Player Post([FromBody]NewPlayerCommand newPlayer)
+        public async Task<Player> Post([FromBody]NewPlayerCommand newPlayer)
         {
-            Player player = Player.GetMockedPlayer();
+            Player player = new Player();
             player.Name = newPlayer.Name;
 
-            return player;
+            return await _dataClient.CreatePlayerIfNotExists(player);
         }
 
-        [HttpPut("{id}")]
-        public Player Put(string id, [FromBody]ModifyPlayerCommand modifiedPlayer)
+        [HttpPut]
+        public async Task<Player> Put([FromBody]Player modifiedPlayer)
         {
-            Player player = Player.GetMockedPlayer(id);
-            player.Name = modifiedPlayer.Name;
-            player.Rating = modifiedPlayer.Rating;
-
-            // Todo: Store new modified player object
-
-            return player;
+            return await _dataClient.UpdatePlayer(modifiedPlayer);
         }
     }
 }

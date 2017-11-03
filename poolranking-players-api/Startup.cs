@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,9 +10,14 @@ namespace poolranking_players_api
 {
     public class Startup
     {
+        private DocumentClient client;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            client = new DocumentClient(new Uri(Constants.EndpointUri), Constants.PrimaryKey);
+            client.CreateDatabaseIfNotExistsAsync(new Database { Id = Constants.databaseName }).Wait();
+            client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(Constants.databaseName), new DocumentCollection { Id = Constants.collectionName }).Wait();
         }
 
         public IConfiguration Configuration { get; }
