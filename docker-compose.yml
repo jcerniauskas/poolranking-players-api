@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  poolranking-players-api:
+    image: poolranking-players-api
+    build:
+      context: ./poolranking-players-api
+      dockerfile: Dockerfile
+
+  poolranking-players-api:
+    image: poolranking-players-api
+    build:
+      context: ./poolranking-players-api
+      dockerfile: Dockerfile

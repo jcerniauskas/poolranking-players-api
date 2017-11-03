@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{165521F8-BA86-4DB6-8C6C-0AF6D9760056}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "poolranking-players-api", "poolranking-players-api\poolranking-players-api.csproj", "{081DA91A-BA5A-4051-93E2-7E44EAAC9D84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{165521F8-BA86-4DB6-8C6C-0AF6D9760056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{165521F8-BA86-4DB6-8C6C-0AF6D9760056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{165521F8-BA86-4DB6-8C6C-0AF6D9760056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{165521F8-BA86-4DB6-8C6C-0AF6D9760056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081DA91A-BA5A-4051-93E2-7E44EAAC9D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081DA91A-BA5A-4051-93E2-7E44EAAC9D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081DA91A-BA5A-4051-93E2-7E44EAAC9D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081DA91A-BA5A-4051-93E2-7E44EAAC9D84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE8F7E9E-2814-4722-A843-E68A203AB040}
+	EndGlobalSection
+EndGlobal
