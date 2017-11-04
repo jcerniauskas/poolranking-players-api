@@ -75,9 +75,9 @@ namespace poolranking_players_api.Data
         }
         public async Task<Player> UpdatePlayer(Player player)
         {
-            await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(Constants.databaseName, Constants.collectionName, player.Id), player);
-
-            return await _client.ReadDocumentAsync<Player>(UriFactory.CreateDocumentUri(Constants.databaseName, Constants.collectionName, player.Id));
+            Uri uri = UriFactory.CreateDocumentUri(Constants.databaseName, Constants.collectionName, player.Id);
+            await _client.ReplaceDocumentAsync(uri, player);
+            return await _client.ReadDocumentAsync<Player>(uri);
         }
     }
 }

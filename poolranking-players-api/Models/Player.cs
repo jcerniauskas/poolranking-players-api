@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace poolranking_players_api.Models
 {
@@ -14,6 +15,7 @@ namespace poolranking_players_api.Models
             Volatility = newPlayer.Volatility;
         }
 
+        [JsonProperty("id")]
         public string Id { get; set; }
      }
 }
