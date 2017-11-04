@@ -18,52 +18,58 @@ namespace poolranking_players_api.Data
             _client = new DocumentClient(new Uri(Constants.EndpointUri), Constants.PrimaryKey);
         }
 
+        private Uri CreateUri(string playerId = null)
+        {
+            if (playerId != null)
+            {
+                return UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, playerId);
+            }
+
+            return UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName);
+        }
+
         public async Task<Player> CreatePlayerIfNotExists(Player player)
         {
             if (player.Id != null)
             {
                 try
                 {
-                    var foundPlayer = await _client.ReadDocumentAsync(
-                         UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, player.Id));
+                    var foundPlayer = await _client.ReadDocumentAsync(CreateUri(player.Id));
 
                     return foundPlayer.Resource.ConvertTo<Player>();
                 }
-                catch (DocumentClientException de)
+                catch (DocumentClientException e)
                 {
-                    if (de.StatusCode != HttpStatusCode.NotFound)
+                    if (e.StatusCode != HttpStatusCode.NotFound)
                     {
                         throw;
                     }
 
-                    var createdPlayerWithId = await _client.CreateDocumentAsync(
-                        UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName), player);
+                    var createdPlayerWithId = await _client.CreateDocumentAsync(CreateUri(), player);
 
                     return createdPlayerWithId.Resource.ConvertTo<Player>();
                 }
             }
 
-            var newPlayer =
-                await _client.CreateDocumentAsync(
-                    UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName), player);
+            var newPlayer = await _client.CreateDocumentAsync(CreateUri(), player);
 
             return newPlayer.Resource.ConvertTo<Player>();
         }
 
-        public async Task<Player> GetPlayer(string id)
+        public async Task<Player> GetPlayer(string playerId)
         {
-            return await _client.ReadDocumentAsync<Player>(
-                UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, id));
+            if (playerId == null)
+            {
+                throw new ArgumentNullException(nameof(playerId));
+            }
+
+            return await _client.ReadDocumentAsync<Player>(CreateUri(playerId));
         }
 
         public async Task<List<Player>> GetPlayers()
         {
-            IDocumentQuery<Player> query = _client.CreateDocumentQuery<Player>(
-                UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName),
-                new FeedOptions { MaxItemCount = -1 })
-                .AsDocumentQuery();
-
             List<Player> results = new List<Player>();
+            IDocumentQuery<Player> query = _client.CreateDocumentQuery<Player>(CreateUri(), new FeedOptions { MaxItemCount = -1 }).AsDocumentQuery();
 
             while (query.HasMoreResults)
             {
@@ -74,9 +80,7 @@ namespace poolranking_players_api.Data
         }
         public async Task<Player> UpdatePlayer(Player player)
         {
-            var updatedPlayer =
-                await _client.ReplaceDocumentAsync(
-                    UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, player.Id), player);
+            var updatedPlayer = await _client.ReplaceDocumentAsync(CreateUri(player.Id), player);
 
             return updatedPlayer.Resource.ConvertTo<Player>();
         }
