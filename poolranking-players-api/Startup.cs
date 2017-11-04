@@ -5,6 +5,7 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using poolranking_players_api.Data;
 
 namespace poolranking_players_api
 {
@@ -26,6 +27,8 @@ namespace poolranking_players_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSingleton(new DataClient());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

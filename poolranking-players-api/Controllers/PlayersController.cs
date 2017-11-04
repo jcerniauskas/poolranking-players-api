@@ -11,9 +11,9 @@ namespace poolranking_players_api.Controllers
     {
         private DataClient _dataClient;
 
-        public PlayersController()
+        public PlayersController(DataClient dataClient)
         {
-            _dataClient = new DataClient();
+            _dataClient = dataClient;
         }
 
         [HttpGet]
