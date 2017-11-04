@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
-using Newtonsoft.Json;
 using poolranking_players_api.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace poolranking_players_api.Data
 {
     public class DataClient
     {
-        private DocumentClient _client;
+        private readonly DocumentClient _client;
 
         public DataClient()
         {
@@ -28,19 +27,19 @@ namespace poolranking_players_api.Data
                     var foundPlayer = await _client.ReadDocumentAsync(
                          UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, player.Id));
 
-                    return JsonConvert.DeserializeObject<Player>(foundPlayer.Resource.ToString());
+                    return foundPlayer.Resource.ConvertTo<Player>();
                 }
                 catch (DocumentClientException de)
                 {
-                    if (de.StatusCode == HttpStatusCode.NotFound)
+                    if (de.StatusCode != HttpStatusCode.NotFound)
                     {
-                        var createdPlayerWithId = await _client.CreateDocumentAsync(
-                              UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName), player);
-
-                        return JsonConvert.DeserializeObject<Player>(createdPlayerWithId.Resource.ToString());
+                        throw;
                     }
 
-                    throw;
+                    var createdPlayerWithId = await _client.CreateDocumentAsync(
+                        UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName), player);
+
+                    return createdPlayerWithId.Resource.ConvertTo<Player>();
                 }
             }
 
@@ -48,13 +47,13 @@ namespace poolranking_players_api.Data
                 await _client.CreateDocumentAsync(
                     UriFactory.CreateDocumentCollectionUri(Constants.DatabaseName, Constants.CollectionName), player);
 
-            return JsonConvert.DeserializeObject<Player>(newPlayer.Resource.ToString());
+            return newPlayer.Resource.ConvertTo<Player>();
         }
 
         public async Task<Player> GetPlayer(string id)
         {
             return await _client.ReadDocumentAsync<Player>(
-                    UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, id));
+                UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, id));
         }
 
         public async Task<List<Player>> GetPlayers()
@@ -75,9 +74,11 @@ namespace poolranking_players_api.Data
         }
         public async Task<Player> UpdatePlayer(Player player)
         {
-            Uri uri = UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, player.Id);
-            await _client.ReplaceDocumentAsync(uri, player);
-            return await _client.ReadDocumentAsync<Player>(uri);
+            var updatedPlayer =
+                await _client.ReplaceDocumentAsync(
+                    UriFactory.CreateDocumentUri(Constants.DatabaseName, Constants.CollectionName, player.Id), player);
+
+            return updatedPlayer.Resource.ConvertTo<Player>();
         }
     }
 }
