@@ -16,8 +16,8 @@ namespace poolranking_players_api
         {
             Configuration = configuration;
             client = new DocumentClient(new Uri(Constants.EndpointUri), Constants.PrimaryKey);
-            client.CreateDatabaseIfNotExistsAsync(new Database { Id = Constants.databaseName }).Wait();
-            client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(Constants.databaseName), new DocumentCollection { Id = Constants.collectionName }).Wait();
+            client.CreateDatabaseIfNotExistsAsync(new Database { Id = Constants.DatabaseName }).Wait();
+            client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(Constants.DatabaseName), new DocumentCollection { Id = Constants.CollectionName }).Wait();
         }
 
         public IConfiguration Configuration { get; }

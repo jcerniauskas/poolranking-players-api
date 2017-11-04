@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace poolranking_players_api.Models
+﻿namespace poolranking_players_api.Models
 {
     public class NewPlayerCommand
     {
