@@ -31,10 +31,7 @@ namespace poolranking_players_api.Controllers
         [HttpPost]
         public async Task<Player> Post([FromBody]NewPlayerCommand newPlayer)
         {
-            Player player = new Player();
-            player.Name = newPlayer.Name;
-
-            return await _dataClient.CreatePlayerIfNotExists(player);
+            return await _dataClient.CreatePlayerIfNotExists(new Player(newPlayer));
         }
 
         [HttpPut]
