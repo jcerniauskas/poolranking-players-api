@@ -13,6 +13,7 @@ namespace poolranking_players_api
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseUrls("http://0.0.0.0:3020")
                 .Build();
     }
 }
